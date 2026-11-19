@@ -1,0 +1,24 @@
+# Material de planeación (PDFs privados, no se publican)
+datos-extra/
+
+# Dependencias y builds
+node_modules/
+dist/
+build/
+.vercel/
+coverage/
+
+# Variables de entorno (secretos): solo se sube .env.example
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Sistema y editor
+.DS_Store
+Thumbs.db
+.idea/
