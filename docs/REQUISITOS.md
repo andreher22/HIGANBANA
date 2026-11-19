@@ -21,12 +21,16 @@ dónde empezar. Diferenciador: rutinas por bloques **A, B y C** (método ABCD): 
 - RF-03 Consentimiento expreso y separado para datos de salud (casilla sin marcar por defecto), guardado como historial.
 - RF-04 Cuestionario de inicio: lugar (casa / gym / ambos), objetivo, días disponibles y preguntas de seguridad.
 - RF-05 Filtro de seguridad: menor de 18 bloquea; síntomas con esfuerzo piden consultar a un profesional; embarazo/posparto sin rutina automática; condición cardiometabólica o lesión reciente limitan intensidad.
-- RF-06 Catálogo de ejercicios con ficha en texto (posición, pasos, dónde sentirlo, errores comunes, versión fácil/difícil, señal para parar) y su fuente.
+- RF-06 Catálogo de ejercicios con ficha en texto (imágenes después del MVP) (posición, pasos, dónde sentirlo, errores comunes, versión fácil/difícil, señal para parar) y su fuente.
 - RF-07 Rutina recomendada del día dividida en bloques A/B/C, para casa y gym.
 - RF-08 Marcar una sesión como completada (el bloque A cuenta como día completo).
 - RF-09 Historial simple de sesiones.
 - RF-10 Borrar la cuenta y descargar mis datos.
 - RF-11 Aviso visible: la app no sustituye la consulta médica.
+- RF-20 Cardio con escalera de impacto: caminata → marcha/step → intervalos caminar-trotar → trote → cuerda → saltos y sprints.
+- RF-21 Plan de carrera progresivo. Regla: ninguna sesión de carrera más de 10% más larga que la más larga del último mes.
+- RF-22 Rutinas de gym con mancuernas, barra y discos, poleas/cables y máquinas guiadas.
+- RF-23 Hipopresivos como ejercicio **opcional** de respiración y postura. Nunca se presentan como tratamiento ni prometen resultados (la evidencia es limitada). **No se ofrecen** con presión alta, condición cardiometabólica ni embarazo/posparto. Pendiente: investigación detallada antes de implementarlos.
 
 ### B · Segunda versión
 - RF-12 Ajuste opcional por ciclo menstrual (como sugerencia + "¿cómo te sientes hoy?").
@@ -60,17 +64,24 @@ dónde empezar. Diferenciador: rutinas por bloques **A, B y C** (método ABCD): 
 | RNF-08 | Rendimiento móvil aceptable: imágenes optimizadas (WebP) y caché del catálogo. |
 | RNF-09 | Escalable: el contenido es dato, no código; reglas versionadas; textos en español e inglés desde el inicio. |
 | RNF-10 | Idioma inicial: español. |
+| RNF-11 | Transparencia del contenido: la app indica que las rutinas se basan en experiencia propia y en fuentes publicadas (visibles en cada ficha), y que no han sido revisadas por un profesional de la salud. |
 
 ## 4. Stack acordado
 
 pnpm workspaces · TypeScript estricto · React + Vite · Hono + Zod (@hono/zod-openapi + Swagger)
 · Supabase (Postgres, Auth, RLS) · Vitest + Playwright · Sentry · Vercel · GitHub Actions.
 
-## 5. Dudas abiertas (sección 12 del estudio)
+## 5. Decisiones sobre las dudas del estudio (sección 12)
 
-- [ ] ¿Habrá una persona profesional (entrenador/a certificado/a o fisioterapia) que revise el contenido?
-- [ ] Edad mínima: ¿18 años?
-- [ ] Peso y estatura: ¿opcionales o fuera del MVP?
-- [ ] Cardio en el MVP: ¿plan de carrera de 9 semanas o solo caminata y cuerda?
-- [ ] Gym promedio en México: ¿qué equipo suponemos?
-- [ ] Hipopresivos: ¿en el MVP o después?
+Respondidas el 2026-11-19 (issue #5).
+
+| # | Duda | Decisión | Qué implica |
+|---|------|----------|-------------|
+| 1 | ¿Profesional que revise el contenido? | **No por ahora.** El contenido se basa en la experiencia de Andrea y en las fuentes del estudio. En una revisión futura se buscará a alguien que lo revise, o Andrea tomará un curso o certificación que lo avale. | La app lo dice con honestidad (RNF-11). Reglas conservadoras para principiantes. Se retoma antes de un lanzamiento más amplio. |
+| 2 | Edad mínima | **18 años.** | Regla S1 del motor; registro bloqueado para menores. |
+| 3 | Peso y estatura | **En el MVP, opcionales y apagados por defecto.** | Se muestran como tendencia, se pueden borrar. Solo ajustan el impacto inicial, nunca para juzgar. |
+| 4 | Cardio en el MVP | **Caminata, cuerda y plan de carrera.** Funcionalidad completa desde el MVP. | Escalera de impacto completa y regla del 10% (RF-20, RF-21). Requiere tabla de sesiones de carrera. |
+| 5 | Equipo de un gym promedio en México | **Mancuernas, barra y discos, poleas/cables y máquinas guiadas.** | El motor puede usar todo ese equipo en rutinas de gym (RF-22). |
+| 6 | Hipopresivos | **En el MVP, opcionales y recomendados** como ejercicio de respiración y core. | Ver RF-23. Antes de implementarlos se hace una investigación más detallada. |
+
+**Lo que se deja para después:** las imágenes de los ejercicios se incorporan con calma más adelante. El MVP usa fichas solo con texto.
