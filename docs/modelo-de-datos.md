@@ -34,6 +34,8 @@ erDiagram
     AUTH_USERS ||--o{ SESIONES_REALIZADAS : completa
     SESIONES_PLAN ||--o{ SESIONES_REALIZADAS : se_hace_como
     SESIONES_REALIZADAS ||--o{ REGISTROS_SERIES : detalla
+    AUTH_USERS ||--o{ SESIONES_CARRERA : corre
+    SESIONES_REALIZADAS ||--o| SESIONES_CARRERA : incluye
     EJERCICIOS ||--o{ REGISTROS_SERIES : de
     AUTH_USERS ||--o{ CICLOS : registra
     AUTH_USERS ||--o{ MEDIDAS : registra
@@ -258,15 +260,30 @@ Todas 🔴, **apagadas por defecto**, con botón para borrar todo.
 | seguridad_inicial, chequeos_diarios | dueña | API |
 | zonas_dolor, ciclos, medidas, pruebas_atleta | dueña | dueña |
 | planes, sesiones_plan, sesion_ejercicios | dueña | API |
-| sesiones_realizadas, registros_series | dueña | API |
+| sesiones_realizadas, registros_series, sesiones_carrera | dueña | API |
 | ejercicios, imagenes, estilos_atleta | todas (autenticadas) | nadie desde la app |
 | reportes_ficha | dueña | dueña (solo insertar) |
 | versiones_reglas, lista_espera, configuracion | nadie desde la app | API |
 
 **Prueba obligatoria por tabla:** iniciar sesión como usuaria A e intentar leer y escribir datos de la usuaria B. Debe fallar.
 
-## Pendiente de decidir (issue #5)
+## Decisiones aplicadas (issue #5)
 
-- **Peso y estatura en el MVP:** en este modelo viven en `medidas` (opcional). Si se quitan del MVP, la tabla llega en la versión B.
-- **Cardio:** si entra el plan de carrera de 9 semanas, falta una tabla de sesiones de carrera (duración, distancia) para la regla del 10%.
-- **Hipopresivos:** no requieren tabla nueva; serían ejercicios del catálogo.
+- **Peso y estatura:** entran al MVP en `medidas`, opcionales y apagados por defecto.
+- **Cardio completo en el MVP:** se agrega `sesiones_carrera` (abajo) para aplicar la regla del 10%.
+- **Hipopresivos:** no requieren tabla nueva; son ejercicios del catálogo con `contraindicaciones` = presión alta, condición cardiometabólica, embarazo/posparto.
+- **Gym:** el campo `equipo` de `ejercicios` usa: mancuernas, barra, discos, poleas, máquinas.
+
+#### `sesiones_carrera` 🟡 · Fase 4
+| Campo | Tipo | Notas |
+|---|---|---|
+| id | bigint PK | |
+| usuario_id | uuid FK | |
+| sesion_realizada_id | FK | Opcional, si fue parte de una sesión del plan |
+| fecha | date | |
+| tipo | text | `caminata`, `intervalos`, `trote`, `cuerda` |
+| duracion_min | numeric | Base de la regla: ≤ 110% de la más larga del último mes |
+| distancia_km | numeric | Opcional |
+| intervalos | jsonb | Ej. `[{trote: 1, camina: 2}, ...]` |
+
+**RLS:** leer la dueña; escribe la API (valida la regla del 10% con el motor).
